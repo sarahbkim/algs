@@ -1,7 +1,6 @@
 package com.sarahkim;
 
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
+
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 // TODO: create an extra top/bottom site in siteConnections, so initializes
@@ -154,22 +153,20 @@ public class Percolation {
         System.out.println(p.convertIntToArray(8)[0] + ", " + p.convertIntToArray(8)[1] + " should be [2, 3]");
         System.out.println(p.convertIntToArray(25)[0] + ", " + p.convertIntToArray(25)[1] + " should be [5, 5]");
 
-//        Percolation p2 = new Percolation(2);
-//        System.out.println("This is another Percolation object, 'p2");
-//        System.out.println("Checking helper function: convertToFlatArrayIndex");
-//        System.out.println(p2.convertToFlatArrayIndex(1, 1) + " should be 0");
-//        System.out.println(p2.convertToFlatArrayIndex(2, 1) + " should be 3");
-//        System.out.println(p2.convertToFlatArrayIndex(1, 2) + " should be 2");
-//        System.out.println(p2.convertToFlatArrayIndex(2, 2) + " should be 4");
+        Percolation p2 = new Percolation(2);
+        System.out.println("This is another Percolation object, 'p2");
+        System.out.println("Checking helper function: convertToFlatArrayIndex");
+        System.out.println(p2.convertToFlatArrayIndex(1, 1) + " should be 0");
+        System.out.println(p2.convertToFlatArrayIndex(2, 1) + " should be 3");
+        System.out.println(p2.convertToFlatArrayIndex(1, 2) + " should be 2");
+        System.out.println(p2.convertToFlatArrayIndex(2, 2) + " should be 4");
 
-//
-//        System.out.println("Checking helper function: convertIntToArray:");
-//        System.out.println(p2.convertIntToArray(1)[0] + ", " + p.convertIntToArray(1)[1] + " should be [1, 1]");
-//        System.out.println(p2.convertIntToArray(2)[0] + ", " + p.convertIntToArray(2)[1] + " should be [1, 2]");
-//        System.out.println(p2.convertIntToArray(3)[0] + ", " + p.convertIntToArray(3)[1] + " should be [2, 1]");
-//        System.out.println(p2.convertIntToArray(4)[0] + ", " + p.convertIntToArray(4)[1] + " should be [2, 2]");
-//
 
+        System.out.println("Checking helper function: convertIntToArray:");
+        System.out.println(p2.convertIntToArray(1)[0] + ", " + p.convertIntToArray(1)[1] + " should be [1, 1]");
+        System.out.println(p2.convertIntToArray(2)[0] + ", " + p.convertIntToArray(2)[1] + " should be [1, 2]");
+        System.out.println(p2.convertIntToArray(3)[0] + ", " + p.convertIntToArray(3)[1] + " should be [2, 1]");
+        System.out.println(p2.convertIntToArray(4)[0] + ", " + p.convertIntToArray(4)[1] + " should be [2, 2]");
 
         System.out.println("Checking function: open");
         p.open(1, 1);
