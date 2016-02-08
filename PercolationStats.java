@@ -8,11 +8,13 @@ import com.sarahkim.Percolation;
  */
 public class PercolationStats {
     double[] thresholds;
+    int sampleSize;
     double criticalValue = -1.96; // z-value for 95% confidence interval
 
     // perform T independent experiments on an NxN grid
     public PercolationStats(int N, int T) {
         thresholds = new double[T];
+        sampleSize = T;
         performAllExperiments(N, T);
     }
     private void performAllExperiments(int N, int reps) {
@@ -27,34 +29,35 @@ public class PercolationStats {
         while(!p.percolates()) {
             int randomI = StdRandom.uniform(N) + 1;
             int randomJ = StdRandom.uniform(N) + 1;
-            p.open(randomI, randomJ);
-            opens++;
-            if(p.percolates()) {
-                thresholds[round] = (double)opens/(N*N);
-                break;
+            if(!p.isOpen(randomI, randomJ)) {
+                p.open(randomI, randomJ);
+                opens++;
+                if(p.percolates()) {
+                    thresholds[round] = (double)opens/(N*N);
+                    break;
+                }
             }
         }
     }
-
     // sample mean of percolation threshold
     public double mean() {
         return StdStats.mean(thresholds);
     }
     // sample std deviation of percolation threshold
     public double stddev() {
-        return StdStats.stddev(thresholds);
+        return StdStats.stddevp(thresholds);
     }
 
     public double confidenceLo() {
-        return mean() - marginOfError();
+        return mean() - standardOfError();
     }
 
     public double confidenceHi() {
-        return mean() + marginOfError();
+        return mean() + standardOfError();
     }
 
-    private double marginOfError() {
-        return criticalValue * stddev();
+    private double standardOfError() {
+        return stddev()/(Math.sqrt(sampleSize));
     }
 
     public static void main(String[] args) {

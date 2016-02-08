@@ -37,7 +37,7 @@ public class Percolation {
             siteConnections.union(i, topSite-1);
         }
         // connect bottom row to bottomSite
-        for(int j=((length*length)-length-1);j<length*length;j++) {
+        for(int j=((length*length)-length);j<length*length;j++) {
             siteConnections.union(j, bottomSite-1);
         }
     }
@@ -64,8 +64,10 @@ public class Percolation {
         }
 
         int index = convertToFlatArrayIndex(i, j);
-        if(siteStates[index] == BLOCKED) { siteStates[index] = OPENED; }
-        checkNeighbors(i, j);
+        if (siteStates[index] == BLOCKED) {
+            siteStates[index] = OPENED;
+            checkNeighbors(i, j);
+        }
     }
 
     public boolean percolates() {
@@ -128,81 +130,39 @@ public class Percolation {
     }
 
     public static void main(String[] args) {
-        Percolation p = new Percolation(5);
+        Percolation p = new Percolation(10);
         System.out.println("This is the new Percolation object, 'p': " + p);
 
-        for(int i=1;i<=5;i++) {
-            System.out.println("Is connected to topSite: " + i + " " + p.isConnected(i, 26));
+        for(int i=1;i<=10;i++) {
+            System.out.println("Is connected to topSite: " + i + " " + p.isConnected(i, p.topSite));
         }
-        for(int i=20;i<=25;i++) {
-            System.out.println("Is connected to bottomSite: " + i + " " + p.isConnected(i, 27));
+        for(int i=11;i<91;i++) {
+            if(p.isConnected(i, p.topSite)) {
+                System.out.println("should not connected to topSite: " + i + " " + p.isConnected(i, p.topSite));
+            }
+            if(p.isConnected(i, p.bottomSite)) {
+                System.out.println("should not connected to bottomSite: " + i + " " + p.isConnected(i, p.bottomSite));
+            }
+
         }
-
-        System.out.println("Checking helper function: convertToFlatArrayIndex");
-        System.out.println(p.convertToFlatArrayIndex(1, 1) + " should be 0");
-        System.out.println(p.convertToFlatArrayIndex(2, 1) + " should be 5");
-        System.out.println(p.convertToFlatArrayIndex(1, 3) + " should be 2");
-        System.out.println(p.convertToFlatArrayIndex(2, 3) + " should be 7");
-        System.out.println(p.convertToFlatArrayIndex(4, 4) + " should be 18");
-        System.out.println(p.convertToFlatArrayIndex(5, 5) + " should be 24");
-
-        System.out.println("Checking helper function: convertIntToArray:");
-        System.out.println(p.convertIntToArray(0)[0] + ", " + p.convertIntToArray(0)[1] + " should be [1, 1]");
-        System.out.println(p.convertIntToArray(6)[0] + ", " + p.convertIntToArray(6)[1] + " should be [2, 1]");
-        System.out.println(p.convertIntToArray(3)[0] + ", " + p.convertIntToArray(3)[1] + " should be [1, 3]");
-        System.out.println(p.convertIntToArray(8)[0] + ", " + p.convertIntToArray(8)[1] + " should be [2, 3]");
-        System.out.println(p.convertIntToArray(25)[0] + ", " + p.convertIntToArray(25)[1] + " should be [5, 5]");
-
-        Percolation p2 = new Percolation(2);
-        System.out.println("This is another Percolation object, 'p2");
-        System.out.println("Checking helper function: convertToFlatArrayIndex");
-        System.out.println(p2.convertToFlatArrayIndex(1, 1) + " should be 0");
-        System.out.println(p2.convertToFlatArrayIndex(2, 1) + " should be 3");
-        System.out.println(p2.convertToFlatArrayIndex(1, 2) + " should be 2");
-        System.out.println(p2.convertToFlatArrayIndex(2, 2) + " should be 4");
-
-
-        System.out.println("Checking helper function: convertIntToArray:");
-        System.out.println(p2.convertIntToArray(1)[0] + ", " + p.convertIntToArray(1)[1] + " should be [1, 1]");
-        System.out.println(p2.convertIntToArray(2)[0] + ", " + p.convertIntToArray(2)[1] + " should be [1, 2]");
-        System.out.println(p2.convertIntToArray(3)[0] + ", " + p.convertIntToArray(3)[1] + " should be [2, 1]");
-        System.out.println(p2.convertIntToArray(4)[0] + ", " + p.convertIntToArray(4)[1] + " should be [2, 2]");
-
-        System.out.println("Checking function: open");
-        p.open(1, 1);
-        System.out.println("[1,1] isOpen: " + p.isOpen(1, 1));
-        System.out.println("[1,1] isFull: " + p.isFull(1, 1));
-        p.open(2, 1);
-        System.out.println("[2,1] isOpen: " + p.isOpen(2, 1));
-        System.out.println("[2,1] isFull: " + p.isFull(2, 1));
-        p.open(4, 1);
-        System.out.println("[4,1] isOpen: " + p.isOpen(4, 1));
-        System.out.println("[4,1] isFull: " + p.isFull(4, 1));
-        p.open(1, 4);
-        System.out.println("[1,4] isOpen: " + p.isOpen(1, 4));
-        System.out.println("[1,4] isFull: " + p.isFull(1, 4));
-        p.open(5, 3);
-        System.out.println("[5,3] isOpen: " + p.isOpen(5, 3));
-        System.out.println("[5,3] isFull: " + p.isFull(5, 3));
-        p.open(4, 4);
-        System.out.println("[4,4] isOpen: " + p.isOpen(4, 4));
-        System.out.println("[4,4] isFull: " + p.isFull(4, 4));
-
-        p.open(3, 4);
-        System.out.println("[3, 4] isOpen: " + p.isOpen(3, 4));
-        System.out.println("[3, 4] isFull: " + p.isFull(3, 4));
-        p.open(4, 3);
-        System.out.println("[4,3] isOpen: " + p.isOpen(4, 3));
-        System.out.println("[4,3] isFull: " + p.isFull(4, 3));
-        System.out.println(p.percolates());
-        p.open(2, 2);
-        System.out.println(p.percolates());
-        p.open(3, 2);
-        System.out.println("3, 2 is Open: " + p.isOpen(3, 2));
-        System.out.println("3, 2 is Full: " + p.isFull(3, 2));
-        System.out.println(p.percolates());
-        p.open(3,3);
-        System.out.println(p.percolates());
+        for(int i=91;i<=100;i++) {
+            System.out.println("Is connected to bottomSite: " + i + " " + p.isConnected(i, p.bottomSite));
+        }
+//
+//        System.out.println("Checking helper function: convertToFlatArrayIndex");
+//        System.out.println(p.convertToFlatArrayIndex(1, 1) + " should be 0");
+//        System.out.println(p.convertToFlatArrayIndex(2, 1) + " should be 5");
+//        System.out.println(p.convertToFlatArrayIndex(1, 3) + " should be 2");
+//        System.out.println(p.convertToFlatArrayIndex(2, 3) + " should be 7");
+//        System.out.println(p.convertToFlatArrayIndex(4, 4) + " should be 18");
+//        System.out.println(p.convertToFlatArrayIndex(5, 5) + " should be 24");
+//
+//        System.out.println("Checking helper function: convertIntToArray:");
+//        System.out.println(p.convertIntToArray(0)[0] + ", " + p.convertIntToArray(0)[1] + " should be [1, 1]");
+//        System.out.println(p.convertIntToArray(6)[0] + ", " + p.convertIntToArray(6)[1] + " should be [2, 1]");
+//        System.out.println(p.convertIntToArray(3)[0] + ", " + p.convertIntToArray(3)[1] + " should be [1, 3]");
+//        System.out.println(p.convertIntToArray(8)[0] + ", " + p.convertIntToArray(8)[1] + " should be [2, 3]");
+//        System.out.println(p.convertIntToArray(25)[0] + ", " + p.convertIntToArray(25)[1] + " should be [5, 5]");
 
     }
 
