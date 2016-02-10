@@ -16,7 +16,7 @@ public class Deque<Item> implements Iterable<Item> {
     public Deque() {
         size = 0;
 
-        // sentinal nodes for head and tail
+        // Sentinel nodes for head and tail
         head = new Node(null);
         tail = new Node(null);
 
@@ -73,7 +73,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
     public Item removeLast() {
         if (size > 0) {
-            Node oldTail = tail;
+            Node oldTail = tail.prev;
             // set new tail item
             tail.prev = tail.prev.prev;
             tail.prev.next = tail;
@@ -88,8 +88,24 @@ public class Deque<Item> implements Iterable<Item> {
             throw new NoSuchElementException("Queue is empty");
         }
     }
-    public Iterator<Item> iterator() {
+    public Iterator<Item> iterator() { return new QueueIterator(); }
 
+    private class QueueIterator implements Iterator<Item> {
+        private Node curr = head.next;
+        public void remove () {
+            throw new UnsupportedOperationException();
+        }
+        public boolean hasNext() {
+            return curr.next != null;
+        }
+        public Item next() {
+            if(curr == null || curr.value == null) {
+                throw new NoSuchElementException();
+            }
+            Item item = curr.value;
+            curr = curr.next;
+            return item;
+        }
     }
     private void validateItem(Item item) throws NullPointerException {
          if (item == null) {

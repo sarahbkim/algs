@@ -1,5 +1,4 @@
 package com.sarahkim;
-
 /******************************************************************************
  *  Compilation:  javac PercolationVisualizer.java
  *  Execution:    java PercolationVisualizer input.txt
