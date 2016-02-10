@@ -1,7 +1,6 @@
 package com.sarahkim;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Queue;
 
 // REMOVE THIS FROM HOMEWORK
 
