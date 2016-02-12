@@ -12,29 +12,56 @@ import java.util.NoSuchElementException;
 
 // The order of two or more iterators to the same randomized queue must be mutually independent;
 // each iterator must maintain its own random order.
-// Throw a java.lang.NullPointerException if the client attempts to add a null item;
-// throw a java.util.NoSuchElementException if the client attempts to sample or dequeue an item from an empty randomized queue;
-// throw a java.lang.UnsupportedOperationException if the client calls the remove() method in the iterator;
 // throw a java.util.NoSuchElementException if the client calls the next() method in the iterator and there are no more items to return.
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
-    public RandomizedQueue() {
+    private Item[] arr;
+    private int size;
 
+    public RandomizedQueue() {
+        arr = (Item[]) new Object[2];
+        size = 0;
     }
     public boolean isEmpty() {
-
+        return size == 0;
     }
     public int size() {
-
+        return size;
     }
     public void enqueue(Item item) {
-
+        if(item == null) throw new NullPointerException("You cannot add null item to queue");
+        if (size == arr.length) adjustArraySize(2*arr.length);
+        arr[size+1] = item;
+        size++;
     }
     public Item dequeue() {
+        if(isEmpty()) throw new NoSuchElementException("Queue is empty");
+        // grab random item
+        int rand = StdRandom.uniform(0, size);
+        Item randomItem = arr[rand];
 
+        // take care of holes in filled part of array
+        if(rand != size) {
+            arr[rand] = arr[size];
+            arr[size] = null;
+        }
+        size--;
+
+        if ((size > 0 ) && size == arr.length/4) adjustArraySize(arr.length/2);
+        return randomItem;
     }
     public Item sample() {
-
+        if(isEmpty()) throw new NoSuchElementException("Queue is empty");
+        int rand = StdRandom.uniform(0, size);
+        return arr[rand];
+    }
+    private void adjustArraySize(int capacity) {
+        assert capacity >= size;
+        Item[] newArr = (Item[]) new Object[capacity];
+        for(int i=0;i<size;i++) {
+            newArr[i] = arr[i];
+        }
+        arr = newArr;
     }
     public Iterator<Item> iterator() {
         return new RandomizedQueueIterator();
@@ -48,6 +75,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         public Item next() {
         }
     }
+
     public static void main(String[] args) {
 
     }

@@ -2,8 +2,6 @@ package com.sarahkim;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-// REMOVE THIS FROM HOMEWORK
-
 
 public class Deque<Item> implements Iterable<Item> {
     private int size;
