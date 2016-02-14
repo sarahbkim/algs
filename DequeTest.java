@@ -1,6 +1,5 @@
 package com.sarahkim;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

@@ -10,9 +10,6 @@ import java.util.NoSuchElementException;
 // except that the item removed is chosen uniformly at random from items in the data structure.
 
 
-// The order of two or more iterators to the same randomized queue must be mutually independent;
-// each iterator must maintain its own random order.
-// throw a java.util.NoSuchElementException if the client calls the next() method in the iterator and there are no more items to return.
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] arr;
@@ -31,7 +28,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public void enqueue(Item item) {
         if(item == null) throw new NullPointerException("You cannot add null item to queue");
         if (size == arr.length) adjustArraySize(2*arr.length);
-        arr[size+1] = item;
+        arr[size] = item;
         size++;
     }
     public Item dequeue() {
@@ -63,16 +60,28 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
         arr = newArr;
     }
+    // The order of two or more iterators to the same randomized queue must be mutually independent;
+    // each iterator must maintain its own random order.
     public Iterator<Item> iterator() {
         return new RandomizedQueueIterator();
     }
     private class RandomizedQueueIterator implements Iterator<Item> {
-        public void remove () {
-            throw new UnsupportedOperationException();
-        }
+        private int idx = 0;
+        public void remove () { throw new UnsupportedOperationException(); }
+
+        // TODO: this must come out randomly too
         public boolean hasNext() {
+            return idx < size;
         }
+        // TODO: this must come out randomly too
         public Item next() {
+            if(hasNext()) {
+                Item nextItem = arr[idx];
+                idx++;
+                return nextItem;
+            } else {
+                throw new NoSuchElementException("No next element");
+            }
         }
     }
 
