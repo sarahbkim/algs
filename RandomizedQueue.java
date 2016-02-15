@@ -71,11 +71,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         boolean shuffled = false;
 
         public void remove () { throw new UnsupportedOperationException(); }
-        // TODO: this must come out randomly too
         public boolean hasNext() {
             return start < size;
         }
-        // TODO: this must come out randomly too
         public Item next() {
             if(!shuffled) {
                 shuffleArray();
