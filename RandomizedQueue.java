@@ -66,22 +66,34 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return new RandomizedQueueIterator();
     }
     private class RandomizedQueueIterator implements Iterator<Item> {
-        private int idx = 0;
-        public void remove () { throw new UnsupportedOperationException(); }
+        int start = 0;
+        int[] copied;
+        boolean shuffled = false;
 
+        public void remove () { throw new UnsupportedOperationException(); }
         // TODO: this must come out randomly too
         public boolean hasNext() {
-            return idx < size;
+            return start < size;
         }
         // TODO: this must come out randomly too
         public Item next() {
+            if(!shuffled) {
+                shuffleArray();
+            }
             if(hasNext()) {
-                Item nextItem = arr[idx];
-                idx++;
-                return nextItem;
+                int randomIdx = copied[start];
+                start++;
+                return arr[randomIdx];
             } else {
                 throw new NoSuchElementException("No next element");
             }
+        }
+        private void shuffleArray() {
+            copied = new int[size];
+            for(int i=0;i<size;i++) {
+                copied[i] = i;
+            }
+            StdRandom.shuffle(copied);
         }
     }
 

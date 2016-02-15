@@ -19,11 +19,6 @@ public class RandomizedQueueTest {
 
     private RandomizedQueue r;
 
-    @Before
-    public void setUp() throws Exception {
-        r = new RandomizedQueue();
-    }
-
     @Test
     public void testisEmpty() throws Exception {
         assertEquals(r.isEmpty(), true);
@@ -101,18 +96,25 @@ public class RandomizedQueueTest {
         Iterator j = t.iterator();
         assertEquals(i.hasNext(), true);
         assertEquals(j.hasNext(), false);
-
-        for(int k=20;k>reps;k--) {
-            t.enqueue(k);
+        for(int idx=0;idx<reps;idx++) {
+            t.enqueue(idx);
         }
+
         assertEquals(j.hasNext(), true);
-        assertEquals(j.next(), 20);
-        assertEquals(i.next(), 0);
+
+        for(int idx=0;idx<t.size();idx++){
+            System.out.println(j.next());
+        }
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        r = new RandomizedQueue();
     }
     @Test
     public void testRandomnessOfIterators() throws Exception {
         RandomizedQueue t = new RandomizedQueue();
-        int reps = 20;
+        int reps = 10;
         for(int i=0;i<reps;i++) {
             r.enqueue(i);
             t.enqueue(i);
@@ -120,20 +122,10 @@ public class RandomizedQueueTest {
 
         Iterator rIt = r.iterator();
         Iterator tIt = t.iterator();
-        for(int i=0;i<reps;i++) {
-            Object rItem = rIt.next();
-            Object tItem = tIt.next();
-            System.out.println(rItem + ", " + tItem);
-        }
     }
 
 
 
-
-//    @Test
-//    public void testSize() {
-//        assertEquals(r.size(), 0);
-//    }
 
 
 }
