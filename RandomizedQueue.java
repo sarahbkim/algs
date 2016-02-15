@@ -6,10 +6,6 @@ import java.util.NoSuchElementException;
 /**
  * Created by sarahbkim on 2/10/16.
  */
-// A randomized queue is similar to a stack or queue,
-// except that the item removed is chosen uniformly at random from items in the data structure.
-
-
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] arr;
