@@ -38,9 +38,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         Item randomItem = arr[rand];
 
         // take care of holes in filled part of array
-        if(rand != size) {
-            arr[rand] = arr[size];
-            arr[size] = null;
+        if(rand != size-1) {
+            arr[rand] = arr[size-1];
+            arr[size-1] = null;
         }
         size--;
 
