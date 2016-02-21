@@ -12,18 +12,28 @@ public class FastCollinearPoints {
 
     // finds all line segments containing 4 or more points
     public FastCollinearPoints(Point[] points) {
+        if (points == null) {
+            throw new NullPointerException();
+        }
         Arrays.sort(points);
         Point origin = points[0];
         calculateSlope(origin, points);
     }
     private void calculateSlope(Point origin, Point[] points) {
-        Comparator c = origin.slopeOrder();
-        Arrays.sort(points, c);
         double currSlope = origin.slopeTo(points[0]);
         int sameCount = 0;
         int start = 0;
         ArrayList<LineSegment> tempSegments = new ArrayList<LineSegment>();
-        for(int i=1;i<points.length;i++) {
+
+        // Sort by slope
+        Arrays.sort(points, origin.slopeOrder());
+
+        // Find equal slopes & create line segments
+        for(int i=1;i<points.length-1;i++) {
+            // Validate Points
+            if ( i < points.length-2 ) {
+                validatePoint(origin, points[i], points[i + 1]);
+            }
             double nextSlope = origin.slopeTo(points[i]);
             if (currSlope == nextSlope) {
                 sameCount++;
@@ -40,6 +50,20 @@ public class FastCollinearPoints {
             }
         }
         segments = tempSegments.toArray((new LineSegment[tempSegments.size()]));
+    }
+    private void validatePoint(Point origin, Point p, Point next) {
+        if (p == null || origin == null) {
+            throw new NullPointerException();
+        }
+        if (origin.compareTo(p) == 0) {
+            throw new IllegalArgumentException();
+        }
+        if (next != null) {
+            if (p.compareTo(next) == 0) {
+                throw new IllegalArgumentException();
+            }
+        }
+
     }
     public int numberOfSegments() {
         return segments.length;
