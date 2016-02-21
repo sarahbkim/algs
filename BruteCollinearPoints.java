@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-//TODO: this needs to evaluate points length 5 .. N, 4 points at a time
 public class BruteCollinearPoints {
     private int MIN_COLL_LENGTH = 4;
     private int segmentCount;
