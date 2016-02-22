@@ -34,10 +34,9 @@ public class FastCollinearPoints {
 
             // sort by slope
             Point[] sorted = sortedBySlope(toSort, origin);
-            Point[] test = sortedBySlope(points, origin);
 
             // find collinear points
-            getCollinearPoints(test, origin);
+            getCollinearPoints(sorted, origin);
         }
         convertTempSegments();
     }
@@ -65,22 +64,27 @@ public class FastCollinearPoints {
                     hasSameSlope++;
                 } else {
                     if (hasSameSlope >= 2) {
-                        ArrayList<Point> segmentPoints = new ArrayList<Point>();
-                        segmentPoints.add(origin);
-                        int k = start;
-                        while(k <= i) {
-                            segmentPoints.add(sortedPoints[k]);
-                            k++;
-                        }
-                        Point[] s = segmentPoints.toArray((new Point[segmentPoints.size()]));
-                        Arrays.sort(s);
-                        createLineSegment(s);
+                        pointsIdxToLineSegment(start, i, sortedPoints, origin);
                     }
                     hasSameSlope = 0; // reset
                     start = i + 1;
                 }
+            } else if (hasSameSlope >= 2){
+                pointsIdxToLineSegment(start, i, sortedPoints, origin);
             }
         }
+    }
+    private void pointsIdxToLineSegment(int start, int end, Point[] arr, Point origin) {
+        ArrayList<Point> segmentPoints = new ArrayList<Point>();
+        segmentPoints.add(origin);
+        while(start <= end) {
+            segmentPoints.add(arr[start]);
+            start++;
+        }
+        Point[] s = segmentPoints.toArray((new Point[segmentPoints.size()]));
+        Arrays.sort(s);
+        createLineSegment(s);
+
     }
     private void convertTempSegments() {
         segments = tempSegments.toArray((new LineSegment[tempSegments.size()]));
@@ -112,9 +116,9 @@ public class FastCollinearPoints {
         if (p == null || origin == null) {
             throw new NullPointerException();
         }
-//        if (origin.compareTo(p) == 0) {
-//            throw new IllegalArgumentException();
-//        }
+        if (origin.compareTo(p) == 0) {
+            throw new IllegalArgumentException();
+        }
         if (next != null && p.compareTo(next) == 0) {
             throw new IllegalArgumentException();
         }
