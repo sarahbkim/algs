@@ -1,4 +1,5 @@
 package com.sarahkim;
+
 import java.util.Iterator;
 import edu.princeton.cs.algs4.StdRandom;
 import java.util.NoSuchElementException;
