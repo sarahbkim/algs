@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.Before;
 
 
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 /**
@@ -16,6 +18,7 @@ public class BoardTest {
     int[][] threesZeroFirst;
     int[][] scrambledThrees;
     int[][] scrambledThreeV2;
+    int[][] scrambledThreeV3;
     int[][] fours;
 
     @Before
@@ -25,9 +28,16 @@ public class BoardTest {
         threesZeroFirst = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
         scrambledThrees = new int[][]{{5, 2, 1}, {4, 0, 6}, {3, 8, 7}};
         scrambledThreeV2 = new int[][]{{8, 1, 3}, {4, 0, 2}, {7, 6, 5}};
+        scrambledThreeV3 = new int[][]{{0, 1, 3}, {4, 2, 5}, {7, 8, 6}};
         fours = new int[][]{{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
 
         b = new Board(threes);
+    }
+
+    @Test
+    public void testIsGoalFalse() throws Exception {
+        Board b2 = new Board(scrambledThreeV3);
+        assertFalse(b2.isGoal());
     }
 
     @Test
@@ -35,6 +45,24 @@ public class BoardTest {
         int expectedLength = threes.length;
         int boardLength = b.dimension();
         assertEquals(expectedLength, boardLength);
+    }
+
+    @Test
+    public void testGetsValidNeighbors() throws Exception {
+        Iterable<Board> neighbors = b.neighbors();
+//        System.out.println("original: \n" + b.toString());
+//        for (Board n : neighbors){
+//           System.out.println(n.toString());
+//        }
+    }
+    @Test
+    public void testGetsValidNeighborsScrambled() throws Exception {
+        Board threes = new Board(scrambledThrees);
+        Iterable<Board> neighbors = threes.neighbors();
+//        System.out.println("original: \n" + threes.toString());
+//        for (Board n : neighbors){
+//            System.out.println(n.toString());
+//        }
     }
 
 //    8  1  3        1  2  3     1  2  3  4  5  6  7  8    1  2  3  4  5  6  7  8
@@ -84,6 +112,7 @@ public class BoardTest {
     @Test
     public void testTwin() throws Exception {
         Board test = b.twin();
+        System.out.println("TWINS");
         System.out.println(b.toString());
         System.out.println(test.toString());
     }
@@ -92,6 +121,7 @@ public class BoardTest {
     public void testTwinOfScrambled() throws Exception {
         Board test = new Board(scrambledThreeV2);
         Board twin = test.twin();
+        System.out.println("TWINS");
         System.out.println(test.toString());
         System.out.println(twin.toString());
     }
@@ -100,8 +130,8 @@ public class BoardTest {
     public void testTwinsOfFours() throws Exception {
         Board test = new Board(fours);
         Board twin = test.twin();
-        System.out.println("hi" + test.toString());
-        System.out.println(twin.toString());
+//        System.out.println("hi" + test.toString());
+//        System.out.println(twin.toString());
     }
 
     @Test
@@ -123,4 +153,5 @@ public class BoardTest {
 //        System.out.println(b.toString());
 //        System.out.println(fourBoard.toString());
     }
+
 }

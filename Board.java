@@ -1,12 +1,10 @@
 package com.sarahkim;
 
+import java.util.Random;
+import java.util.ArrayList;
 import edu.princeton.cs.algs4.Queue;
-import java.util.Collection;
-import java.util.Iterator;
 
-/**
- * Created by sarahbkim on 2/27/16.
- */
+
 public class Board {
     private int dimension;
     private int[] gameBoard;
@@ -25,7 +23,7 @@ public class Board {
 
     // board dimension N
     public int dimension() {
-       return dimension;
+        return dimension;
     }
     // number of blocks out of place
     public int hamming() {
@@ -56,20 +54,7 @@ public class Board {
     }
     // is this board the goal board?
     public boolean isGoal() {
-        int startBlock = this.gameBoard[0];
-        int endBlock = this.gameBoard[this.gameBoard.length-1];
-        if (startBlock == 0) return false;
-        // do loop
-        if (endBlock == 0) {
-            for (int i=0; i<this.gameBoard.length; i++) {
-                int expectedVal = i + 1;
-                if (endBlock == 0 && i == this.gameBoard.length-1) expectedVal = 0;
-                if (expectedVal != this.gameBoard[i]) return false;
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return this.hamming() == 0;
     }
     private int convertTo1DArrayIdx(int row, int rowLength, int col) {
         return (row * rowLength) + col;
@@ -89,42 +74,54 @@ public class Board {
     }
     // a board that is obtained by exchanging any pair of blocks
     public Board twin() {
-        int swap = dimension;
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        Random randomGenerator = new Random();
+        while (numbers.size() < 3) {
+            int random = randomGenerator.nextInt((gameBoard.length-1)) + 1;
+            if (!numbers.contains(random)) {
+                numbers.add(random);
+            }
+        }
+
+        int swap = numbers.get(0);
+        int swap2 = numbers.get(1);
         int[][] copy = new int[dimension][dimension];
+        int swapCurrRow = 0;
+        int swapCurrCol = 0;
+        int swap2CurrRow = 0;
+        int swap2CurrCol =0;
 
         for(int i=0; i<gameBoard.length;i++) {
             int currRow = i / dimension;
             int currCol = i % dimension;
-
-            if (gameBoard[i] == swap) {
-                copy[currRow][currCol] = gameBoard[i+1];
-                if (currCol < dimension-1) {
-                    copy[currRow][currCol+1] = gameBoard[i];
-                } else {
-                    copy[currRow+1][0] = gameBoard[i];
-                }
-                i++;
-            } else {
-                copy[currRow][currCol] = gameBoard[i];
+            if (swap == gameBoard[i]) {
+                swapCurrRow = currRow;
+                swapCurrCol = currCol;
             }
+            if (swap2 == gameBoard[i]) {
+                swap2CurrRow = currRow;
+                swap2CurrCol = currCol;
+            }
+            copy[currRow][currCol] = gameBoard[i];
         }
+        copy[swapCurrRow][swapCurrCol] = swap2;
+        copy[swap2CurrRow][swap2CurrCol] = swap;
         return new Board(copy);
     }
     // string representation of this board (in the output format specified below)
     public String toString() {
         int round = 1;
-        StringBuilder str = new StringBuilder();
-        str.append(dimension + "\n");
-
+        StringBuilder s = new StringBuilder();
+        s.append(dimension + "\n");
         for (int i=0; i<gameBoard.length; i++) {
-            str.append(String.format("%2d", this.gameBoard[i]));
+            s.append(String.format("%2d ", this.gameBoard[i]));
             // add new line
             if ((i < gameBoard.length-1) && ((i + 1) / round == dimension)) {
-                str.append("\n");
+                s.append("\n");
                 round++;
             }
         }
-        return str.toString();
+        return s.toString();
     }
     public Iterable<Board> neighbors() {
         for (int i=0; i<gameBoard.length; i++) {
