@@ -2,31 +2,33 @@ package com.sarahkim.redo;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
+    private static final int BLOCKED = 0;
+    private static final int OPENED = 1;
+
     private int[] sites;
     private WeightedQuickUnionUF connections;
     private int dim;
     private int virtualTopSiteIndex;
     private int virtualBottomSiteIndex;
 
-    private static final int BLOCKED = 0;
-    private static final int OPENED = 1;
-
     public Percolation(int N) {
-        if (N <= 0) throw new IllegalArgumentException();
-        sites = new int[N*N];
-        connections = new WeightedQuickUnionUF((N*N) + 2);
+        if (N <= 0) {
+            throw new IllegalArgumentException();
+        }
+        sites = new int[N * N];
+        connections = new WeightedQuickUnionUF((N * N) + 2);
         dim = N;
-        virtualTopSiteIndex = N*N;
+        virtualTopSiteIndex = N * N;
         virtualBottomSiteIndex = virtualTopSiteIndex + 1;
 
         // initializes all sites to be blocked
-        for (int i = 0; i < N*N; i++) {
+        for (int i = 0; i < N * N; i++) {
             // connect top row to topSite
             if (i >= 0 && i < dim) {
                 connections.union(i, virtualTopSiteIndex);
             }
             // connect bottom row to bottomSite
-            if (i >= (dim*dim) - dim && i < dim*dim) {
+            if (i >= (dim * dim) - dim && i < dim * dim) {
                 connections.union(i, virtualBottomSiteIndex);
             }
             sites[i] = BLOCKED;
@@ -80,12 +82,12 @@ public class Percolation {
         return connections.connected(virtualTopSiteIndex, virtualBottomSiteIndex);
     }
     private void checkInputs(int i, int j) {
-       if(i < 1 || j < 1 || i > dim || j > dim) {
+       if (i < 1 || j < 1 || i > dim || j > dim) {
            throw new IndexOutOfBoundsException();
        }
     }
     private int sanitizeIdxInput(int i) {
-        return i-1;
+        return i - 1;
     }
     private int[] to2DArrayIdx(int i) {
         // returns (row, column)
