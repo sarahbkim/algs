@@ -1,6 +1,7 @@
 package com.sarahkim.kdtree;
 
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.RectHV;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,7 +60,33 @@ public class KdTreeTest {
     }
 
     @Test
-    public void testStringVersion() throws Exception {
+    public void testRange() throws Exception {
+        k.insert(new Point2D(0.1, 0.2));
+        k.insert(new Point2D(0.3, 0.2));
+        k.insert(new Point2D(0.1, 0.3));
+        RectHV rect = new RectHV(0, 0, 0.2, 0.2);
+        Iterable<Point2D> i = k.range(rect);
+        for(Point2D p : i) {
+            assertEquals(p, new Point2D(0.1, 0.2));
+        }
+    }
+    @Test
+    public void testNearest() throws Exception {
+        k.insert(new Point2D(0.9, 0.9));
+        k.insert(new Point2D(0.1, 0.2));
+        k.insert(new Point2D(0.3, 0.2));
+        k.insert(new Point2D(0.1, 0.3));
+        Point2D nearest = k.nearest(new Point2D(0.6, 0.7));
+        assertEquals(nearest, new Point2D(0.9, 0.9));
+    }
+    @Test
+    public void testNearest2() throws Exception {
+        k.insert(new Point2D(0.9, 0.9));
+        k.insert(new Point2D(0.1, 0.2));
+        k.insert(new Point2D(0.3, 0.2));
+        k.insert(new Point2D(0.1, 0.3));
+        Point2D nearest2 = k.nearest(new Point2D(0.1, 0.1));
+        assertEquals(nearest2, new Point2D(0.1, 0.2));
 
     }
 }

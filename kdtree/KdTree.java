@@ -1,9 +1,8 @@
 package com.sarahkim.kdtree;
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
-import org.w3c.dom.css.Rect;
-import sun.text.normalizer.VersionInfo;
 
 public class KdTree {
     private Node root; // root of the Kd Tree
@@ -38,7 +37,6 @@ public class KdTree {
     }
     private Node insert(Node node, Point2D p, boolean orient, RectHV unitSquare) {
         if (node == null) {
-            System.out.println(unitSquare.toString() + ", " + p.toString());
             size++;
             return new Node(p, orient, unitSquare);
         }
@@ -60,8 +58,6 @@ public class KdTree {
            // split by x-axis
             RectHV left = new RectHV(xmin, ymin, startNode.p.x(), ymax);
             RectHV right = new RectHV(startNode.p.x(), ymin, xmax, ymax);
-            System.out.println("left: " + left.toString());
-            System.out.println("right: " + right.toString());
             arr[0] = left;
             arr[1] = right;
         } else {
@@ -139,19 +135,51 @@ public class KdTree {
             drawTree(n.rt);
         }
     }
-    public static void main(String[] args) {
-        KdTree k = new KdTree();
-        k.insert(new Point2D(0.2, 0.2));
-        k.insert(new Point2D(0.1, 0.5));
-        k.insert(new Point2D(0.3, 0.4));
-        k.insert(new Point2D(0.5, 0.4));
-        k.insert(new Point2D(0.3, 0.1));
-        k.draw();
-        System.out.println(k.stringVersion());
+    public Iterable<Point2D> range(RectHV rect) {
+        Queue<Point2D> q = new Queue<Point2D>();
+        Node start = root;
+        return rectIntersect(q, start, rect);
     }
-//    public Iterable<Point2D> range(RectHV rect) {
-//    }
-//    public Point2D nearest(Point2D p) {
-//    }
+    private Queue<Point2D> rectIntersect(Queue<Point2D> q, Node node, RectHV rect) {
+        if (node != null) {
+            // if query rect doesn't intersect the rectangle, don't explore
+            if (node.rect.intersects(rect)) {
+                if (rect.contains(node.p)) {
+                    q.enqueue(node.p);
+                }
+                rectIntersect(q, node.lb, rect);
+                rectIntersect(q, node.rt, rect);
+            }
+        }
+        return q;
+    }
+    public Point2D nearest(Point2D p) {
+        double d = p.distanceTo(root.p);
+        return checkNearest(root, d, root.p, p);
+    }
+    private Point2D checkNearest(Node n, double distance, Point2D nearest, Point2D queryPoint) {
+        if (n != null) {
+            // set new nearest
+            double currDistance = n.p.distanceTo(queryPoint);
+            if (currDistance < distance) {
+                distance = currDistance;
+                nearest = n.p;
+            }
+            // prune trees
+            if (n.lb != null) {
+                double leftD = n.lb.rect.distanceTo(queryPoint);
+                if (leftD == 0 || leftD < distance) {
+                    return checkNearest(n.lb, distance, nearest, queryPoint);
+                }
+            }
+            if (n.rt != null) {
+                double rightD = n.rt.rect.distanceTo(queryPoint);
+                if (rightD == 0 || rightD < distance) {
+                    return checkNearest(n.rt, distance, nearest, queryPoint);
+                }
+            }
+        }
+        return nearest;
+    }
 
 }
