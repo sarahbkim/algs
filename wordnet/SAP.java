@@ -65,9 +65,13 @@ public class SAP {
        return v + "->" + w;
     }
 
+    private CommonAncestor getCache(int v, int w) {
+        return pathLengths.get(key(v, w)) != null ? pathLengths.get(key(v, w)) : pathLengths.get(key(w, v));
+    }
+
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
-        CommonAncestor cache = pathLengths.get(key(v, w)) != null ? pathLengths.get(key(v, w)) : pathLengths.get(key(w, v));
+        CommonAncestor cache = getCache(v, w);
         if (cache != null ){
             return cache.getLength();
         }
@@ -77,7 +81,7 @@ public class SAP {
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
-        CommonAncestor cache = pathLengths.get(key(v, w)) != null ? pathLengths.get(key(v, w)) : pathLengths.get(key(w, v));
+        CommonAncestor cache = getCache(v, w);
         if (cache != null ){
             return cache.getAncestor();
         }
