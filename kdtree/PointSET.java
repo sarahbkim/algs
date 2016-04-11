@@ -8,9 +8,9 @@ import java.util.TreeSet;
 import java.util.Iterator;
 
 public class PointSET {
-    TreeSet<Point2D> set;
+    private TreeSet<Point2D> set;
     public PointSET() {
-        set = new TreeSet();
+        set = new TreeSet<Point2D>();
     }
     public boolean isEmpty() {
         return set.isEmpty();
@@ -36,9 +36,7 @@ public class PointSET {
     }
     public Iterable<Point2D> range(RectHV rect) {
         if (rect == null) throw new NullPointerException();
-        if (set.size() == 0) return null;
-
-        Queue q = new Queue<Point2D>();
+        Queue<Point2D> q = new Queue<Point2D>();
 
         Iterator<Point2D> it = set.iterator();
         while (it.hasNext()) {
