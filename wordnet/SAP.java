@@ -5,28 +5,36 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SAP {
-    HashMap<Integer, ArrayList<Integer>> ancestors;
     HashMap<String, CommonAncestor> pathLengths;
+    Digraph G;
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
         if (G == null) {
             throw new NullPointerException();
         }
-        ancestors = new HashMap<Integer, ArrayList<Integer>>();
-        pathLengths = new HashMap<String, CommonAncestor>();
+        this.pathLengths = new HashMap<String, CommonAncestor>();
+        this.G = G;
+    }
+
+    private void calculateAncestralPath(int v, int w) {
+        BreadthFirstDirectedPaths bV = new BreadthFirstDirectedPaths(G, v);
+        BreadthFirstDirectedPaths bW = new BreadthFirstDirectedPaths(G, w);
+
+        int root = -1;
+        double distance = Double.POSITIVE_INFINITY;
 
         for (int i=0; i<G.V(); i++) {
-            BreadthFirstDirectedPaths b = new BreadthFirstDirectedPaths(G, i);
-            for (int j=0; j<G.V(); j++) {
-                if (b.pathTo(j) != null)  {
-                    for (int path: b.pathTo(j)) {
-                        if (ancestors.get(i) == null) ancestors.put(i, new ArrayList<Integer>());
-                        if (!ancestors.get(i).contains(path)) ancestors.get(i).add(path);
-                    }
+            if (bV.hasPathTo(i) && bW.hasPathTo(i)) {
+                int currLength = bV.distTo(i)  + bW.distTo(i);
+
+                if (currLength < distance) {
+                    distance = currLength;
+                    root = i;
                 }
             }
         }
+        pathLengths.put(key(v, w), new CommonAncestor(v, w, (int) distance, root));
     }
 
     private class CommonAncestor {
@@ -87,23 +95,6 @@ public class SAP {
         }
         calculateAncestralPath(v, w);
         return pathLengths.get(key(v, w)).getAncestor();
-    }
-
-    private void calculateAncestralPath(int v, int w) {
-        if (ancestors.get(v) != null && ancestors.get(w) != null) {
-            ArrayList<Integer> longer = ancestors.get(v).size() > ancestors.get(w).size() ? ancestors.get(v) : ancestors.get(w);
-            ArrayList<Integer> other = longer.equals(ancestors.get(v)) ? ancestors.get(w) : ancestors.get(v);
-            for (int i=0; i<longer.size(); i++) {
-                if (other.contains(longer.get(i))) {
-                    int ancestor = longer.get(i);
-                    int length = longer.indexOf(ancestor) + other.indexOf(ancestor);
-                    CommonAncestor c = new CommonAncestor(v, w, length, ancestor);
-                    pathLengths.put(key(v, w), c);
-                    break;
-                }
-            }
-        }
-
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
